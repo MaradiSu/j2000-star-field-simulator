@@ -150,9 +150,35 @@ void selfTest() {
     require(rejected,"Zero quaternion accepted");
     std::cout << "All geometry/convention self-tests passed\n";
 }
+#include "terminal_animation.h"
 int main(int argc, char** argv) {
     try {
-        if(argc==2 && std::string(argv[1])=="--self-test") { selfTest(); return 0; }
+        if(argc==1 || (argc>=2 && std::string(argv[1])=="--animate")) {
+            double duration,rate;
+            if(argc==1 || argc==2) {
+                std::string value;
+                std::cout << "Duration in seconds: " << std::flush;
+                if(!std::getline(std::cin,value)) throw std::runtime_error("Missing duration");
+                duration=number(value);
+                std::cout << "Angular rate in degrees/second (+Y axis): " << std::flush;
+                if(!std::getline(std::cin,value)) throw std::runtime_error("Missing rate");
+                rate=number(value);
+            } else {
+                if(argc!=4) throw std::runtime_error("Usage: star_sim --animate SECONDS DEG_PER_SEC");
+                duration=number(argv[2]); rate=number(argv[3]);
+            }
+            animate(duration,rate); return 0;
+        }
+        if(argc==2 && std::string(argv[1])=="--self-test") {
+            selfTest();
+            Vec s=rotate(rateAttitude(2,5),{0,0,1});
+            require(std::abs(s.x+std::sin(rad(10)))<1e-12,"Animation angular rate failed");
+            s=rotate(rateAttitude(-2,5),{0,0,1});
+            require(s.x>0,"Negative animation rate failed");
+            s=rotate(rateAttitude(0,10),{0,0,1});
+            require(s.z==1,"Stationary sky failed");
+            std::cout << "Animation rate tests passed\n"; return 0;
+        }
         if(argc!=5) {
             std::cerr << "Usage: star_sim catalogue.csv attitude.csv camera.csv output_prefix\n"
                       << "       star_sim --self-test\n"; return 1;

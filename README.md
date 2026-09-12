@@ -1,5 +1,42 @@
 # J2000 star-field simulation in C++
 
+## Live moving stars in your terminal
+
+Run `star_sim` without arguments to enter duration (seconds) and angular rate
+(degrees/second), or supply both directly:
+
+```powershell
+# Windows PowerShell, after building
+.\star_sim.exe --animate 20 3
+```
+
+```sh
+# Linux
+./star_sim --animate 20 3
+```
+
+This runs for 20 seconds at +3 degrees/second about the body +Y axis. Positive
+rates move stars left; negative rates move them right; zero freezes the sky.
+Press **Q**, **Escape**, or **Ctrl+C** to finish early. The animation occupies
+the terminal text area using a separate screen and restores the previous screen
+and cursor afterward. It does not toggle the terminal application's OS full-screen
+setting; maximize your terminal first for a larger view. Use an interactive terminal,
+not redirected output or an IDE output pane. Windows uses a native console screen
+buffer; Linux uses the terminal's alternate-screen support.
+
+The live mode uses 5,000 deterministic synthetic stars distributed around the
+whole sphere, so new stars keep entering as you turn. It starts facing J2000 +Z,
+uses a 60 by 40 degree field of view and updates at approximately 30 frames/second.
+Attitude follows actual elapsed monotonic time, rather than the number of rendered
+frames. Character-cell positions and `@ * + .` brightness symbols are coarse visual
+approximations, not calibrated image pixels. The rectangular text grid can stretch
+the view. High rates can appear jerky or alias. Duration must be greater than zero
+and at most 86,400 seconds; rate is limited to +/-3,600 deg/s.
+
+The live mode needs no CSV files and writes no images. The original CSV-to-PGM
+mode below remains available. `terminal_animation.h` contains terminal handling,
+synthetic sky generation, rate-to-quaternion conversion and the display loop.
+
 A small, dependency-free C++11 learning project for star-tracker optical stimulation. This is an educational simulator with synthetic catalogue data and an invented STOS command file; it is not flight-qualified software or an Airbus interface implementation.
 
 ## Build and verify with CMake
@@ -54,7 +91,7 @@ Source: [Airbus STOS datasheet](https://www.airbus.com/sites/g/files/jlcbta136/f
 No external library is needed. From this folder:
 
 ```sh
-g++ -std=c++11 -O2 -Wall -Wextra -pedantic star_sim.cpp -o star_sim
+g++ -std=c++11 -O2 -Wall -Wextra -pedantic -pthread star_sim.cpp -o star_sim
 ./star_sim --self-test
 mkdir -p generated
 ./star_sim catalogue_j2000.csv attitude.csv camera.csv generated/

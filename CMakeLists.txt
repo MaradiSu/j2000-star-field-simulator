@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(j2000_star_field_simulator LANGUAGES CXX)
 add_executable(star_sim star_sim.cpp)
+find_package(Threads REQUIRED)
+target_link_libraries(star_sim PRIVATE Threads::Threads)
 set_target_properties(star_sim PROPERTIES CXX_STANDARD 11 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
 if(MSVC)
   target_compile_options(star_sim PRIVATE /W4)
