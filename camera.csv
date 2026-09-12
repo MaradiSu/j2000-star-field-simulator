@@ -1,0 +1,2 @@
+width,height,hfov_deg,vfov_deg,mag_limit,psf_sigma_px,peak_dn_mag0,qSB_w,qSB_x,qSB_y,qSB_z
+512,512,20,20,6,1.2,50000,1,0,0,0

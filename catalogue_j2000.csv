@@ -1,0 +1,13 @@
+# SYNTHETIC teaching catalogue in J2000 equatorial axes; not real measured stars.
+# Chosen around +Z (north celestial pole) for an easy identity-attitude test.
+id,ra_deg,dec_deg,mag
+DEMO_CENTER,0,90,1.5
+DEMO_RIGHT,0,85,2.0
+DEMO_DOWN,90,85,2.5
+DEMO_LEFT,180,84,3.0
+DEMO_UP,270,84,2.0
+DEMO_DIAGONAL,45,82,3.5
+DEMO_UP_LEFT,225,81,4.0
+DEMO_FAINT,135,86,7.0
+DEMO_OUTSIDE,0,65,2.0
+DEMO_BEHIND,0,-80,2.0
